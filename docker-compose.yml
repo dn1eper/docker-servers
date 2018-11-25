@@ -1,8 +1,29 @@
 version: '3'
 services:
+
   apache:
     build: 
       context: apache
     ports:
+     - "3000:80"
+    links:
+     - nginx
+
+  nginx:
+    build:
+      context: nginx
+    ports:
      - "80:80"
-    
+    expose:
+     - "3000"
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  php:
+    build:
+      context: php
